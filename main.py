@@ -1,8 +1,8 @@
 from ollama import chat
-from agent import Agent
+from agente.agent import Agent
 
 agent = Agent()
-model ='gpt-oss'
+model ='gpt-oss:20b'
 
 while True:
     
@@ -17,17 +17,18 @@ while True:
         break
     
     #historial
-    agent.messages.append(
-        {
-            "role": "user",
-            "content": user_input
-            }
-        )
+    agent.memory.add("user", user_input)
+    # agent.messages.append(
+    #     {
+    #         "role": "user",
+    #         "content": user_input
+    #         }
+    #     )
     while True:
         #chat
         response = chat( 
             model=model,
-            messages=agent.messages,
+            messages=agent.get_messages(),
             tools=agent.tools
             )
         

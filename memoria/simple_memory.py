@@ -7,6 +7,7 @@ class SimpleMemory:
         self.max_messeges = max_messeges
         self.num_summarize = num_summarize
         self.summary = ""
+        self._load_json()
     
     def add(self, role:str, text:str):
         self.memory.append({
@@ -16,16 +17,22 @@ class SimpleMemory:
         if len(self.memory) > self.max_messeges:
             print(f'Procesando resumen para {self.num_summarize} mensajes')
             
-            to_summarize = self.memory[:self.summary]
+            to_summarize = self.memory[:self.num_summarize]
             self.memory = self.memory[self.num_summarize:]
             
             self.summary = self.summary_memory(to_summarize)
         self._save_json()
     
     def messages(self):
+        msgs = []
+        
         if self.summary:
-            mem_summary = {"role": "system", "content": f'Memorias de conversación: {self.summary}'}
-        return [mem_summary] + self.memory
+            msgs.append({
+                "role": "system",
+                "content": f"Memoria previa: {self.summary}"
+            })
+            
+        return msgs + self.memory
     
     def summary_memory(self, old_memories):
         summary_line = f'Resumen anterior: {self.summary} \n' if self.summary else "No hay resumen previo. \n"
@@ -40,10 +47,10 @@ class SimpleMemory:
         )
         
         resp = chat(
-            model="",
+            model="mistral:latest",
             messages=[{"role": "user", "content": prompt}]
         )
-        msg = resp.choices[0].message
+        msg = resp.message
         return msg.content or ""
     
     def _save_json(self, filename:str = "memory.json"):
@@ -53,3 +60,14 @@ class SimpleMemory:
         }
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
+            
+    def _load_json(self, filename: str = "memory.json"):
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                self.summary = data.get("summary", "")
+                self.memory = data.get("memory", [])
+        except FileNotFoundError:
+            # primera ejecución → no pasa nada
+            self.summary = ""
+            self.memory = []

@@ -1,15 +1,20 @@
 import os
-import json
+from memoria.simple_memory import SimpleMemory
 
 class Agent:
     def __init__(self):
         self.setup_tools()
-        self.messages = [
-            {
-                "role": "system",
-                "content": "Sos un asistente que habla español y sos muy conciso con tus respuestas"
-                }
-            ]
+        self.memory = SimpleMemory()
+        # self.messages = [
+        #     {
+        #         "role": "system",
+        #         "content": "Sos un asistente que habla español y sos muy conciso con tus respuestas"
+        #         }
+        #     ]
+        self.system_prompt = {
+            "role": "system",
+            "content": "Sos un asistente que habla español y sos muy conciso"
+            }
     def setup_tools(self):
         self.tools =[
             {
@@ -118,15 +123,26 @@ class Agent:
             print(err)
             return err
     
+    def get_messages(self):
+        msgs = [self.system_prompt]
+        if self.memory.summary:
+            msgs.append({
+                "role": "system",
+                "content": f"Información previa del usuario: {self.memory.summary}"
+            })
+        msgs += self.memory.memory[-6:]
+        return msgs
+    
     def process_response(self, response):
         #True = si llama a una funcion. False = No hubo llamado
         message = response.message
         
         # guardar respuesta del modelo en el historial
-        self.messages.append({
-            "role": "assistant",
-            "content": message.content
-        })
+        self.memory.add("asistant", message.content)
+        # self.messages.append({
+        #     "role": "assistant",
+        #     "content": message.content
+        # })
         
         # verificar si quiere usar herramientas
         if message.tool_calls:
@@ -141,10 +157,11 @@ class Agent:
                     result = self.read_file(**args)
                 elif fn_name == "edit_file":
                     result = self.edit_file(**args)
-                self.messages.append({
-                    "role": "tool",
-                    "content": json.dumps(result)
-                })
+                self.memory.add("tool", message.content)
+                # self.messages.append({
+                #     "role": "tool",
+                #     "content": json.dumps(result)
+                # })
             return True 
         else:
             print(f'Esclavo AI: {message.content}')
