@@ -1,5 +1,5 @@
 from ollama import chat
-from agente.agent import Agent
+from src.agente.agent import Agent
 
 agent = Agent()
 model ='gpt-oss:20b'

@@ -1,5 +1,5 @@
 import os 
-from core.file_utils import read_file
+from src.core.file_utils import read_file
 
 tool_definition =     {
         "type": "function",

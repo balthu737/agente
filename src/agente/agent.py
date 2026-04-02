@@ -1,6 +1,6 @@
 import importlib
 import os
-from memoria.simple_memory import SimpleMemory
+from src.memoria.simple_memory import SimpleMemory
 
 class Agent:
     def __init__(self):
