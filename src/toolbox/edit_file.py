@@ -1,5 +1,15 @@
 import os 
-from src.core.file_utils import read_file
+from core.file_utils import read_file
+
+"""
+Herramienta para crear o editar archivos dentro del sistema.
+
+Permite crear archivos nuevos o reemplazar texto existente en archivos.
+
+.. warning::
+    Modifica el sistema de archivos directamente. Debe usarse con
+    restricciones de sandbox. No valida rutas fuera del workspace.
+"""
 
 tool_definition =     {
         "type": "function",
@@ -28,6 +38,25 @@ tool_definition =     {
     }
 
 def run(path, prev_text, new_text):
+    """Crea o edita un archivo en el sistema de archivos.
+
+    Si el archivo existe y ``prev_text`` está definido, busca ese texto
+    y lo reemplaza por ``new_text``. Si el archivo no existe o ``prev_text``
+    está vacío, crea el archivo con ``new_text`` como contenido.
+
+    :param path: Ruta del archivo a editar o crear.
+    :type path: str
+    :param prev_text: Texto a buscar para reemplazo (opcional).
+    :type prev_text: str
+    :param new_text: Texto nuevo o contenido completo del archivo.
+    :type new_text: str
+    :returns: Mensaje indicando el resultado de la operación.
+    :rtype: str
+
+    .. warning::
+        No valida que ``path`` esté dentro del workspace permitido.
+        Agregar validación de sandbox antes de usar en producción.
+    """
     print(" ⚙️ Herramienta llamada: edit_file")
     try:
         existe = os.path.exists(path)

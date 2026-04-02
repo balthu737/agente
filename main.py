@@ -4,7 +4,31 @@ from src.agente.agent import Agent
 agent = Agent()
 model ='gpt-oss:20b'
 
+"""
+Script principal para ejecutar el agente conversacional en modo interactivo.
+
+Este script:
+- Inicializa el agente
+- Maneja la entrada del usuario por consola
+- Mantiene el historial de conversación
+- Envía mensajes al modelo
+- Permite la ejecución iterativa de herramientas
+
+Flujo general:
+1. El usuario ingresa un mensaje
+2. Se guarda en memoria
+3. Se envía al modelo junto con el contexto
+4. El modelo responde
+5. Si solicita herramientas, se ejecutan
+6. Se repite hasta que no haya más tool calls
+"""
+
 while True:
+    """
+    Bucle principal de interacción con el usuario.
+
+    Permite mantener una conversación continua hasta que el usuario decida salir.
+    """
     
     user_input = input("Yo: ").strip()
     
@@ -19,7 +43,14 @@ while True:
     #historial
     agent.memory.add("user", user_input)
     while True:
-        #chat
+        """
+        Bucle interno de procesamiento del agente.
+
+        Este loop permite:
+        - Ejecutar múltiples herramientas en cadena
+        - Reconsultar al modelo después de cada ejecución
+        - Finalizar cuando el modelo ya no necesita herramientas
+        """
         response = chat( 
             model=model,
             messages=agent.get_messages(),

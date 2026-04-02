@@ -1,1 +1,4 @@
 ollama
+sphinx
+furo
+sphinx-autodoc-typehints

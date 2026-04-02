@@ -2,7 +2,31 @@ from ollama import chat
 import json
 
 class SimpleMemory:
+    """
+    Sistema de memoria híbrida para un agente conversacional.
+
+    Combina:
+    - Memoria de corto plazo (mensajes recientes)
+    - Memoria de largo plazo (resumen consolidado)
+
+    Funcionalidades principales:
+    - Almacenar mensajes en orden cronológico
+    - Resumir automáticamente mensajes antiguos cuando se supera un límite
+    - Persistir la memoria en un archivo JSON
+    - Recuperar estado previo al iniciar
+
+    Este enfoque permite mantener contexto relevante sin sobrecargar el modelo.
+    """
     def __init__(self, max_messeges:int=12, num_summarize:int=4):
+        """
+        Inicializa el sistema de memoria.
+
+        :param max_messeges: Cantidad máxima de mensajes en memoria antes de resumir
+        :type max_messeges: int
+
+        :param num_summarize: Cantidad de mensajes a resumir cuando se supera el límite
+        :type num_summarize: int
+        """
         self.memory = []
         self.max_messeges = max_messeges
         self.num_summarize = num_summarize
@@ -10,6 +34,20 @@ class SimpleMemory:
         self._load_json()
     
     def add(self, role:str, text:str):
+        """
+        Agrega un nuevo mensaje a la memoria.
+
+        Si se supera el límite de mensajes:
+        - Extrae los mensajes más antiguos
+        - Genera un resumen con ellos
+        - Actualiza la memoria de largo plazo
+
+        :param role: Rol del mensaje ("user", "assistant", "tool", etc.)
+        :type role: str
+
+        :param text: Contenido del mensaje
+        :type text: str
+        """
         self.memory.append({
             "role": role,
             "content": text
@@ -24,6 +62,16 @@ class SimpleMemory:
         self._save_json()
     
     def messages(self):
+        """
+        Construye la lista de mensajes para enviar al modelo.
+
+        Incluye:
+        - El resumen previo como contexto (si existe)
+        - La memoria reciente
+
+        :return: Lista de mensajes estructurados
+        :rtype: list
+        """
         msgs = []
         
         if self.summary:
@@ -35,6 +83,20 @@ class SimpleMemory:
         return msgs + self.memory
     
     def summary_memory(self, old_memories):
+        """
+        Genera un resumen consolidado de mensajes antiguos.
+
+        Utiliza un modelo de lenguaje para:
+        - Combinar el resumen anterior con nuevos mensajes
+        - Mantener información clave (nombres, decisiones, contexto relevante)
+        - Reducir la longitud del historial
+
+        :param old_memories: Lista de mensajes a resumir
+        :type old_memories: list
+
+        :return: Nuevo resumen generado
+        :rtype: str
+        """
         summary_line = f'Resumen anterior: {self.summary} \n' if self.summary else "No hay resumen previo. \n"
         prompt = (
             f'Tu tarea es actualizar la memoria resumen del asistente\n'
@@ -54,6 +116,19 @@ class SimpleMemory:
         return msg.content or ""
     
     def _save_json(self, filename:str = "memory.json"):
+        """
+        Guarda el estado actual de la memoria en un archivo JSON.
+
+        Incluye:
+        - Resumen consolidado
+        - Mensajes recientes
+
+        :param filename: Nombre del archivo de almacenamiento
+        :type filename: str
+
+        Nota:
+            El archivo se sobrescribe en cada guardado.
+        """
         data = {
             "summary": self.summary,
             "memory": self.memory
@@ -62,6 +137,16 @@ class SimpleMemory:
             json.dump(data, f, ensure_ascii=False, indent=4)
             
     def _load_json(self, filename: str = "memory.json"):
+        """
+        Carga la memoria desde un archivo JSON si existe.
+
+        Si el archivo no existe:
+        - Inicializa memoria vacía
+        - No lanza error
+
+        :param filename: Nombre del archivo a cargar
+        :type filename: str
+        """
         try:
             with open(filename, "r", encoding="utf-8") as f:
                 data = json.load(f)
