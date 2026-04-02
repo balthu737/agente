@@ -1,18 +1,14 @@
 import os 
-from src.core.file_utils import read_file
+from core.file_utils import read_file
 
 """
-:mod:`edit_file`
-================
-
 Herramienta para crear o editar archivos dentro del sistema.
 
-Permite:
-- Crear archivos nuevos
-- Reemplazar texto existente en archivos
+Permite crear archivos nuevos o reemplazar texto existente en archivos.
 
-⚠️ Esta herramienta modifica el sistema de archivos, por lo que debe usarse
-con restricciones de seguridad (sandbox / workspace).
+.. warning::
+    Modifica el sistema de archivos directamente. Debe usarse con
+    restricciones de sandbox. No valida rutas fuera del workspace.
 """
 
 tool_definition =     {
@@ -42,39 +38,24 @@ tool_definition =     {
     }
 
 def run(path, prev_text, new_text):
-    """
-    Crea o edita un archivo en el sistema de archivos.
+    """Crea o edita un archivo en el sistema de archivos.
 
-    Comportamiento:
-    - Si el archivo existe y `prev_text` está definido:
-        - Busca `prev_text` en el contenido
-        - Si lo encuentra, lo reemplaza por `new_text`
-        - Si no lo encuentra, devuelve un error
-    - Si el archivo no existe o `prev_text` está vacío:
-        - Crea el archivo con `new_text` como contenido
+    Si el archivo existe y ``prev_text`` está definido, busca ese texto
+    y lo reemplaza por ``new_text``. Si el archivo no existe o ``prev_text``
+    está vacío, crea el archivo con ``new_text`` como contenido.
 
-    :param path: Ruta del archivo a editar o crear
+    :param path: Ruta del archivo a editar o crear.
     :type path: str
-
-    :param prev_text: Texto a buscar para reemplazo (opcional)
+    :param prev_text: Texto a buscar para reemplazo (opcional).
     :type prev_text: str
-
-    :param new_text: Texto nuevo o contenido completo del archivo
+    :param new_text: Texto nuevo o contenido completo del archivo.
     :type new_text: str
-
-    :return: Mensaje indicando el resultado de la operación
+    :returns: Mensaje indicando el resultado de la operación.
     :rtype: str
 
-    :raises Exception: Captura cualquier error interno y devuelve mensaje de fallo
-
-    ⚠️ Seguridad:
-        - Puede sobrescribir archivos existentes
-        - No valida rutas peligrosas (ej: fuera del workspace)
-        - Riesgo de corrupción si se usa incorrectamente
-
-    💡 Recomendación:
-        - Validar que `path` esté dentro de un directorio permitido
-        - Agregar confirmación antes de sobrescribir archivos críticos
+    .. warning::
+        No valida que ``path`` esté dentro del workspace permitido.
+        Agregar validación de sandbox antes de usar en producción.
     """
     print(" ⚙️ Herramienta llamada: edit_file")
     try:

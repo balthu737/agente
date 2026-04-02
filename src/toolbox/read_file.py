@@ -7,7 +7,7 @@ Herramienta para leer el contenido de un archivo del sistema.
 Permite acceder al contenido de archivos de texto dentro de una ruta específica.
 Es utilizada por el agente para inspeccionar información almacenada en el workspace.
 
-⚠️ Esta herramienta accede al sistema de archivos, por lo que debe restringirse
+Esta herramienta accede al sistema de archivos, por lo que debe restringirse
 a un entorno seguro (sandbox).
 """
 
@@ -42,11 +42,11 @@ def run(path):
     :return: Contenido del archivo o mensaje de error
     :rtype: str
 
-    ⚠️ Seguridad:
+    Seguridad:
         - Puede acceder a archivos sensibles si no se restringe la ruta
         - No valida accesos fuera del workspace permitido
 
-    💡 Recomendaciones:
+    Recomendaciones:
         - Limitar acceso a un directorio base (sandbox)
         - Validar rutas antes de abrir archivos
     """

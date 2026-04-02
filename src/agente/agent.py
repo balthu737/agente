@@ -1,6 +1,6 @@
 import importlib
 import os
-from src.memoria.simple_memory import SimpleMemory
+from memoria.simple_memory import SimpleMemory
 
 class Agent:
     """

@@ -126,7 +126,7 @@ class SimpleMemory:
         :param filename: Nombre del archivo de almacenamiento
         :type filename: str
 
-        ⚠️ Nota:
+        Nota:
             El archivo se sobrescribe en cada guardado.
         """
         data = {

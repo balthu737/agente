@@ -1,16 +1,13 @@
 import os
 
 """
-:mod:`list_files_in_dir`
-========================
-
 Herramienta para listar archivos dentro de un directorio.
 
-Permite obtener el contenido de una carpeta del sistema de archivos.
-Es útil para explorar el workspace y entender la estructura de archivos disponible.
+Útil para explorar el workspace y entender la estructura de archivos disponible.
 
-⚠️ Esta herramienta accede al sistema de archivos, por lo que debe limitarse
-a un entorno controlado (sandbox).
+.. warning::
+    Accede al sistema de archivos directamente. Limitar a un directorio
+    base controlado para evitar exponer archivos sensibles.
 """
 
 tool_definition ={
@@ -32,33 +29,24 @@ tool_definition ={
 }
 
 def run(directory="."):
-    """
-    Lista los archivos y carpetas dentro de un directorio.
+    """Lista los archivos y carpetas dentro de un directorio.
 
-    :param directory: Ruta del directorio a listar (por defecto el actual)
+    :param directory: Ruta del directorio a listar. Por defecto el directorio actual.
     :type directory: str
-
-    :return: Diccionario con la lista de archivos o un error
+    :returns: Diccionario con lista de archivos en clave ``files``,
+              o clave ``error`` con el mensaje si falla.
     :rtype: dict
 
-    Estructura de retorno:
-        - Éxito:
-            {
-                "files": ["archivo1.txt", "carpeta", ...]
-            }
+    Ejemplo de retorno exitoso::
 
-        - Error:
-            {
-                "error": "mensaje de error"
-            }
+        {"files": ["archivo1.txt", "carpeta", "script.py"]}
 
-    ⚠️ Seguridad:
-        - Puede exponer archivos sensibles si no se restringe el acceso
-        - No valida rutas fuera del entorno permitido
+    Ejemplo de retorno con error::
 
-    💡 Recomendaciones:
-        - Limitar el acceso a un directorio base (workspace)
-        - Filtrar archivos ocultos o sensibles si es necesario
+        {"error": "No such file or directory: '/ruta/inexistente'"}
+
+    .. warning::
+        No valida rutas fuera del entorno permitido.
     """
     print(" ⚙️ Herramienta llamada: list_files_in_dir")
     try:

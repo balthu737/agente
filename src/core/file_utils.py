@@ -16,7 +16,7 @@ def read_file(path):
 
     :raises None: Los errores son capturados internamente y convertidos en texto
 
-    ⚠️ Seguridad:
+    Seguridad:
         - Validar que la ruta pertenezca a un directorio permitido (sandbox)
         - Evitar accesos a rutas sensibles del sistema
     """
