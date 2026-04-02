@@ -18,12 +18,6 @@ while True:
     
     #historial
     agent.memory.add("user", user_input)
-    # agent.messages.append(
-    #     {
-    #         "role": "user",
-    #         "content": user_input
-    #         }
-    #     )
     while True:
         #chat
         response = chat( 

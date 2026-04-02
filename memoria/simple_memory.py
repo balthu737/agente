@@ -2,7 +2,7 @@ from ollama import chat
 import json
 
 class SimpleMemory:
-    def __init__(self, max_messeges:int=10, num_summarize:int=4):
+    def __init__(self, max_messeges:int=12, num_summarize:int=4):
         self.memory = []
         self.max_messeges = max_messeges
         self.num_summarize = num_summarize
