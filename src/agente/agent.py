@@ -44,11 +44,6 @@ class Agent:
         
         # guardar respuesta del modelo en el historial
         self.memory.add("assistant", message.content)
-        # self.messages.append({
-        #     "role": "assistant",
-        #     "content": message.content
-        # })
-        
         # verificar si quiere usar herramientas
         if message.tool_calls:
             for tool in message.tool_calls:
@@ -63,13 +58,7 @@ class Agent:
                         result = f"Error ejecutando la herramienta: {str(e)}"
                 else:
                     result = f"Herramienta {fn_name} no encontrada"
-                # if fn_name == "list_files_in_dir":
-                #     result = self.list_files_in_dir(**args)
-                # elif fn_name == "read_file":
-                #     result = self.read_file(**args)
-                # elif fn_name == "edit_file":
-                #     result = self.edit_file(**args)
-                self.memory.add("tool", message.content)
+                self.memory.add("tool", str(result))
             return True 
         else:
             print(f'IA: {message.content}')
