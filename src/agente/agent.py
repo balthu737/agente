@@ -1,6 +1,10 @@
 import importlib
 import os
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 from memoria.simple_memory import SimpleMemory
+from core.security import Security
 
 class Agent:
     """
@@ -15,7 +19,7 @@ class Agent:
     Está diseñado para actuar como un asistente personal enfocado en la toma de decisiones,
     resolución de problemas y ejecución de tareas de forma eficiente.
     """
-    def __init__(self):
+    def __init__(self, workspace):
         """
         Inicializa el agente.
 
@@ -31,11 +35,20 @@ class Agent:
         self.tool_map = {}
         
         self.load_tools()
+        self.workspace = workspace
+        self.security = Security(self.workspace)
         
         self.memory = SimpleMemory()
         self.system_prompt = {
             "role": "system",
-            "content": "Sos un asistente que habla español y sos muy conciso"
+            "content": f"""
+            Tu nombre es Balthu.
+            Mi nombre es alejo.
+            Podes guardar y modificar los archivos de la carpeta {self.workspace}.
+            Si la tool que estas usando devuelve un mensaje con la palabra exito o una respuesta valida,
+            entonces no debes volver a ejecutar la accion,
+            en caso contrario que devuelda otra cosa si volver a ejecutar la accion.
+            """
             }
         
     def get_messages(self):
@@ -117,11 +130,16 @@ class Agent:
             for tool in message.tool_calls:
                 fn_name = tool.function.name
                 args = tool.function.arguments
+                path = args.get("path", None)
                 print(f'La IA quiere usar la herramienta: {fn_name}')
                 print(f'Argumentos: {args}')
                 if fn_name in self.tool_map:
                     try:
-                        result = self.tool_map[fn_name](**args)
+                        danger = self.security.authorization(fn_name, path)
+                        if danger == "authorized":
+                            result = self.tool_map[fn_name](**args)
+                        else: 
+                            result = f'La herramienta, {fn_name}, no fue autorizada'
                     except Exception as e:
                         result = f"Error ejecutando la herramienta: {str(e)}"
                 else:

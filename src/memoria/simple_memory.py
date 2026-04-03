@@ -1,6 +1,11 @@
 from ollama import chat
 import json
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+model = os.getenv("model-memory")
 class SimpleMemory:
     """
     Sistema de memoria híbrida para un agente conversacional.
@@ -109,7 +114,7 @@ class SimpleMemory:
         )
         
         resp = chat(
-            model="mistral:latest",
+            model=model,
             messages=[{"role": "user", "content": prompt}]
         )
         msg = resp.message

@@ -1,8 +1,20 @@
 from ollama import chat
-from src.agente.agent import Agent
+import sys
+from dotenv import load_dotenv
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+from agente.agent import Agent
 
-agent = Agent()
-model ='gpt-oss:20b'
+load_dotenv()
+
+workspace_env = os.getenv("workspace")
+
+if os.path.isabs(workspace_env):
+    workspace = workspace_env
+else:
+    workspace = os.path.join(os.path.dirname(__file__), workspace_env)
+agent = Agent(workspace)
+model = os.getenv("model")
 
 """
 Script principal para ejecutar el agente conversacional en modo interactivo.
@@ -30,7 +42,7 @@ while True:
     Permite mantener una conversación continua hasta que el usuario decida salir.
     """
     
-    user_input = input("Yo: ").strip()
+    user_input = input("Alejo: ").strip()
     
     #validacion
     if not user_input:
