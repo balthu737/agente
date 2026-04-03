@@ -90,7 +90,7 @@ class Agent:
         """
         toolbox_path = os.path.join(os.path.dirname(__file__), "..", "toolbox")
         for file in os.listdir(toolbox_path):
-            if file.endswith(".py") and file != "__init__.py":
+            if file.endswith(".py") and file != "__init__.py" and file != "sub-agent.py":
                 module_name = f"toolbox.{file[:-3]}"
                 
                 module = importlib.import_module(module_name)
@@ -99,6 +99,11 @@ class Agent:
                 # función ejecutable
                 tool_name = module.tool_definition["function"]["name"]
                 self.tool_map[tool_name] = module.run
+            elif  file == "sub-agent.py":
+                from toolbox.sub_agent import SubAgent
+                sub_agent = SubAgent()
+                self.tools.append(sub_agent.sub_agent_definition)
+                self.tool_map["sub_agent"] = sub_agent.coder
     
     def process_response(self, response):
         """
