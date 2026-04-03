@@ -131,7 +131,7 @@ class Agent:
                 fn_name = tool.function.name
                 args = tool.function.arguments
                 path = args.get("path", None)
-                print(f'La IA quiere usar la herramienta: {fn_name}')
+                print(f'Balthu quiere usar la herramienta: {fn_name}')
                 print(f'Argumentos: {args}')
                 if fn_name in self.tool_map:
                     try:
@@ -147,4 +147,4 @@ class Agent:
                 self.memory.add("tool", str(result))
             return True 
         else:
-            print(f'IA: {message.content}')
+            print(f'Balthu: {message.content}')
