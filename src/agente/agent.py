@@ -45,9 +45,10 @@ class Agent:
             Tu nombre es Balthu.
             Mi nombre es alejo.
             Podes guardar y modificar los archivos de la carpeta {self.workspace}.
-            Si la tool que estas usando devuelve un mensaje con la palabra exito o una respuesta valida,
-            entonces no debes volver a ejecutar la accion,
-            en caso contrario que devuelda otra cosa si volver a ejecutar la accion.
+            Las tools van a devolver un json con lo siguiente,
+            status si es 200 quiere decir que la accion se realizo con exito y no es necesario repetirla, si devuelve 400 es porque hubo un error al intentar usar la herramienta,
+            messages si es 200 va a devolver un mensaje de confirmacion o el resultado de la herramienta en caso contrario devuelve el error.
+            Si te pido crees codigo utiliza la herramienta que se llama coder que esta especializada en escribir codigo.
             """
             }
         
@@ -90,7 +91,7 @@ class Agent:
         """
         toolbox_path = os.path.join(os.path.dirname(__file__), "..", "toolbox")
         for file in os.listdir(toolbox_path):
-            if file.endswith(".py") and file != "__init__.py" and file != "sub-agent.py":
+            if file.endswith(".py") and file != "__init__.py" and file != "sub_agent.py":
                 module_name = f"toolbox.{file[:-3]}"
                 
                 module = importlib.import_module(module_name)
@@ -102,8 +103,9 @@ class Agent:
             elif  file == "sub-agent.py":
                 from toolbox.sub_agent import SubAgent
                 sub_agent = SubAgent()
-                self.tools.append(sub_agent.sub_agent_definition)
-                self.tool_map["sub_agent"] = sub_agent.coder
+                for name, function in sub_agent.sub_agent.items():
+                    self.tools.append(sub_agent.tool_definition[name])
+                    self.tool_map[name] = function
     
     def process_response(self, response):
         """
@@ -127,9 +129,17 @@ class Agent:
         """
         #True = si llama a una funcion. False = No hubo llamado
         message = response.message
-        
+        tool_calls = [
+            {
+                "function": {
+                    "name": tc.function.name,
+                    "arguments": tc.function.arguments
+                }
+            }
+            for tc in message.tool_calls
+        ] if message.tool_calls else None
         # guardar respuesta del modelo en el historial
-        self.memory.add("assistant", message.content)
+        self.memory.add("assistant", message.content, tool_calls)
         # verificar si quiere usar herramientas
         if message.tool_calls:
             for tool in message.tool_calls:
@@ -152,4 +162,5 @@ class Agent:
                 self.memory.add("tool", str(result))
             return True 
         else:
-            print(f'IA: {message.content}')
+            print(f'Balthu: {message.content}')
+            return False

@@ -51,6 +51,6 @@ def run(directory="."):
     print(" ⚙️ Herramienta llamada: list_files_in_dir")
     try:
         files = os.listdir(directory)
-        return {"files": files}
+        return {"status": 200, "messages": files}
     except Exception as e:
-        return {"error": str(e)}
+        return {"status": 400, "messages": str(e)}

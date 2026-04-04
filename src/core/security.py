@@ -6,7 +6,8 @@ class Security:
         self.herramientas = {
             "edit_file": "y",
             "list_files_in_dir": "n",
-            "read_file": "n"
+            "read_file": "n",
+            "sub_agent": "y"
         }
     
     def authorization(self, herramienta, path):

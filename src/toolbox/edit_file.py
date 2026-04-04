@@ -77,8 +77,8 @@ def run(path, prev_text, new_text):
             f.write(content)
         
         action = "editado" if existe and prev_text else "creado"
-        return f'Archivo {path} {action} existosamente'
+        return {"status": 200, "messages": "Archivo creado"}
     except Exception as e:
         err = f'Error al crear o modificar el archivo {path}'
         print(err)
-        return err
+        return {"status": 400, "messages": err}
