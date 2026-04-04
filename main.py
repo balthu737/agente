@@ -1,7 +1,7 @@
 from ollama import chat
 import sys
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 from agente.agent import Agent
 
@@ -13,6 +13,7 @@ if os.path.isabs(workspace_env):
     workspace = workspace_env
 else:
     workspace = os.path.join(os.path.dirname(__file__), workspace_env)
+
 agent = Agent(workspace)
 model = os.getenv("model")
 

@@ -38,7 +38,7 @@ class SimpleMemory:
         self.summary = ""
         self._load_json()
     
-    def add(self, role:str, text:str):
+    def add(self, role:str, text:str, tool_calls=None):
         """
         Agrega un nuevo mensaje a la memoria.
 
@@ -53,10 +53,17 @@ class SimpleMemory:
         :param text: Contenido del mensaje
         :type text: str
         """
-        self.memory.append({
-            "role": role,
-            "content": text
-        })
+        if tool_calls:
+            self.memory.append({
+                "role": role,
+                "content": text,
+                "tool_calls": tool_calls
+            })
+        else:
+            self.memory.append({
+                "role": role,
+                "content": text
+            })
         if len(self.memory) > self.max_messeges:
             print(f'Procesando resumen para {self.num_summarize} mensajes')
             

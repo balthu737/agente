@@ -1,0 +1,81 @@
+{
+    "summary": " El archivo **pront.txt** contiene las reglas para la creación de herramientas en el sistema completo de Balthu:\n\n1. Rol del Agente: Usted puede trabajar con herramientas disponibles, como `read_file`, `list_files_in_dir`, y `edit_file`. Su objetivo es evolucionar creando nuevas herramientas.\n\n2. Importante: No registre las herramientas en el sistema; su trabajo es generar el código de la herramienta, que se guardará como un archivo `.py` dentro del workspace.\n\n3. Comportamiento Obligatorio: Cuando se le pida crear una herramienta, analice el nombre, parámetros y propósito; siga estrictamente las reglas definidas en este archivo; generar el código completo de la herramienta; proponer la creación del archivo `.py`; pedir confirmación antes de escribir; esperar el OK antes de ejecutar cualquier cambio.\n\n4. Creación de Archivos: El archivo debe guardarse en el workspace y su nombre debe coincidir con la herramienta (ejemplo: `read_file.py`).\n\n5. Reglas Críticas: No diga que no puede crear herramientas; no diga que dependen del sistema; siempre debes cumplir las reglas de estructura.\n\n6. Input y Output esperado: El input recibido será el nombre de la herramienta, parámetros mínimos, y descripción; el output esperado es el código completo de la tool, una breve explicación, sugerir el nombre del archivo y pedir confirmación.\n\n7. Mapa de Creación de Herramientas: Este sistema define cómo crear herramientas correctamente y no se permite improvisar ni modificar el formato. Cada herramienta tiene dos partes obligatorias: Tool Definition y la función `run`.\n\n8. Reglas Obligatorias: Nombres (snake_case, sin espacios, consistentes en toda la tool); Parámetros (definidos en properties, incluídos en required, no usar parámetros ocultos); Manejo de errores (siempre usar try/except, siempre devolver errores como string, nunca romper el sistema); Output (string o datos simples serializables, no objetos complejos); Logs (incluir print(\" ⚙️ Herramienta llamada: nombre_de_la_tool\").\n\n9. Errores Prohibidos: Cambiar nombres entre definition y run; no incluir required; no manejar errores; no usar run; devolver `None` sin explicación.\n\n10. Flujo Interno: Analizar la tool, definir parámetros, crear `tool_definition`, implementar `run`, validar reglas y crear el archivo .py.\n\n11. Objetivo Final: Crear herramientas seguras, reutilizables, consistentes y listas para integrar. Si una herramienta no cumple estas reglas, se considera inválida.",
+    "memory": [
+        {
+            "role": "user",
+            "content": "decime de que trata brevemente"
+        },
+        {
+            "role": "assistant",
+            "content": "El archivo **pront.txt** contiene las reglas y procedimientos para crear nuevas “herramientas” (funciones) dentro del entorno de Balthu. Resume lo siguiente:\n\n- **Objetivo**: Generar y guardar código de herramientas `.py` en el workspace, sin registrar funciones en el sistema externo.\n- **Estructura obligatoria**: Cada herramienta debe incluir una *tool_definition* con nombre, descripción y parámetros, y una función `run` que maneje la lógica, registre logs y gestione errores.\n- **Reglas**: Nombres en snake_case, parámetros declarados y obligatorios, manejo de errores con `try/except`, salida serializable y log de ejecución.\n- **Proceso**: Analizar la herramienta solicitada, proponer el archivo, pedir confirmación, y luego escribir el código si se recibe “OK”.\n- **Notas**: No usar herramientas que dependan del sistema, evitar romper el flujo, y asegurar que el código cumpla con todas las reglas antes de considerarlo válido."
+        },
+        {
+            "role": "user",
+            "content": "ahora con esa info que tenes quiero que la guardes bien y crees estas herramientas, list_files_recursive(directory) – lista archivos incluyendo subcarpetas, delete_file(path) – elimina un archivo específico, move_file(src, dest) – mueve o renombra un archivo"
+        },
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "function": {
+                        "name": "edit_file",
+                        "arguments": {
+                            "path": "C:\\proyectos\\aistente de ia\\workspace\\list_files_recursive.py",
+                            "prev_text": "",
+                            "new_text": "# list_files_recursive.py\n\n# Tool Definition\n\nfrom typing import List\nimport os\n\ntool_definition = {\n    \"type\": \"function\",\n    \"function\": {\n        \"name\": \"list_files_recursive\",\n        \"description\": \"Lista todos los archivos en un directorio y sus subdirectorios.\",\n        \"parameters\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"directory\": {\n                    \"type\": \"string\",\n                    \"description\": \"La ruta del directorio que se desea listar.\"\n                }\n            },\n            \"required\": [\"directory\"]\n        }\n    }\n}\n\n# Function implementation\n\ndef run(directory: str) -> List[str]:\n    \"\"\"Recorre recursivamente el directorio y devuelve la lista completa de archivos.\"\"\"\n    print(\" ⚙️ Herramienta llamada: list_files_recursive\")\n    try:\n        files = []\n        for root, _, filenames in os.walk(directory):\n            for f in filenames:\n                files.append(os.path.join(root, f))\n        return files\n    except Exception as e:\n        err = f'Error en list_files_recursive: {str(e)}'\n        print(err)\n        return err\n"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "role": "tool",
+            "content": "{'status': 200, 'messages': 'Archivo creado'}"
+        },
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "function": {
+                        "name": "edit_file",
+                        "arguments": {
+                            "new_text": "# delete_file.py\n\n# Tool Definition\n\nimport os\n\nfrom typing import Union\n\ntool_definition = {\n    \"type\": \"function\",\n    \"function\": {\n        \"name\": \"delete_file\",\n        \"description\": \"Elimina un archivo dado su ruta completa.\",\n        \"parameters\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"path\": {\n                    \"type\": \"string\",\n                    \"description\": \"La ruta absoluta o relativa del archivo que se desea eliminar.\"\n                }\n            },\n            \"required\": [\"path\"]\n        }\n    }\n}\n\n# Function implementation\n\ndef run(path: str) -> str:\n    \"\"\"Intenta borrar el archivo especificado. Devuelve un mensaje de éxito o error.\"\"\"\n    print(\" ⚙️ Herramienta llamada: delete_file\")\n    try:\n        if not os.path.isfile(path):\n            return f\"Error en delete_file: el archivo '{path}' no existe.\"\n        os.remove(path)\n        return f\"Archivo '{path}' eliminado correctamente.\"\n    except Exception as e:\n        err = f'Error en delete_file: {str(e)}'\n        print(err)\n        return err\n",
+                            "path": "C:\\proyectos\\aistente de ia\\workspace\\delete_file.py",
+                            "prev_text": ""
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "role": "tool",
+            "content": "{'status': 200, 'messages': 'Archivo creado'}"
+        },
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "function": {
+                        "name": "edit_file",
+                        "arguments": {
+                            "new_text": "# move_file.py\n\n# Tool Definition\n\nimport os\nimport shutil\n\nfrom typing import Union\n\ntool_definition = {\n    \"type\": \"function\",\n    \"function\": {\n        \"name\": \"move_file\",\n        \"description\": \"Mueve o renombra un archivo desde una ruta de origen a una ruta de destino.\",\n        \"parameters\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"src\": {\n                    \"type\": \"string\",\n                    \"description\": \"Ruta del archivo origen.\"\n                },\n                \"dest\": {\n                    \"type\": \"string\",\n                    \"description\": \"Ruta donde se moverá o renombrará el archivo.\"\n                }\n            },\n            \"required\": [\"src\", \"dest\"]\n        }\n    }\n}\n\n# Function implementation\n\ndef run(src: str, dest: str) -> str:\n    \"\"\"Mueve o renombra el archivo de src a dest. Devuelve mensaje de éxito o error.\"\"\"\n    print(\" ⚙️ Herramienta llamada: move_file\")\n    try:\n        if not os.path.isfile(src):\n            return f\"Error en move_file: el archivo origen '{src}' no existe.\"\n        dest_dir = os.path.dirname(dest)\n        if dest_dir and not os.path.isdir(dest_dir):\n            os.makedirs(dest_dir, exist_ok=True)\n        shutil.move(src, dest)\n        return f\"Archivo movido de '{src}' a '{dest}'.\"\n    except Exception as e:\n        err = f'Error en move_file: {str(e)}'\n        print(err)\n        return err\n",
+                            "path": "C:\\proyectos\\aistente de ia\\workspace\\move_file.py",
+                            "prev_text": ""
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "role": "tool",
+            "content": "{'status': 200, 'messages': 'Archivo creado'}"
+        },
+        {
+            "role": "assistant",
+            "content": "¡Hola Alejo!  \nHe creado las herramientas `list_files_recursive`, `delete_file` y `move_file` en la carpeta `C:\\proyectos\\aistente de ia\\workspace`.  \nSi necesitas alguna otra herramienta o realizar alguna acción con estas, avísame y con gusto procederé. 🚀"
+        }
+    ]
+}

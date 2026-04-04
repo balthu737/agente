@@ -53,8 +53,8 @@ def run(path):
     print(" ⚙️ Herramienta llamada: read_file")
     try:
         with open(path, encoding="utf-8") as f:
-            return f.read()
+            return {"status": 200, "messages": f.read()}
     except Exception as e:
         err = f'Error al leer el archivo {path}'
         print(err)
-        return err
+        return {"status": 400, "messages": err}
