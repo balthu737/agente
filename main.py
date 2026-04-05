@@ -2,8 +2,10 @@ from ollama import chat
 import sys
 import os
 from dotenv import load_dotenv
+import threading
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 from agente.agent import Agent
+from toolbox.apis.api_db_memoria.init import app
 
 load_dotenv()
 
@@ -16,6 +18,12 @@ else:
 
 agent = Agent(workspace)
 model = os.getenv("model")
+
+def iniciar_api():
+    a = app()
+    a.run(host="0.0.0.0", port=5000, degub=False)
+hilo = threading.Thread(target=iniciar_api)
+hilo.start()
 
 """
 Script principal para ejecutar el agente conversacional en modo interactivo.
@@ -49,7 +57,7 @@ while True:
     if not user_input:
         continue
     
-    if user_input.lower() in ("salir", "exit", "bye", "chau", "hasta la vista baby"):
+    if user_input.lower() in ("salir", "exit", "bye", "chau"):
         print("Adios!")
         break
     

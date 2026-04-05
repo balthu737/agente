@@ -3,7 +3,7 @@ import os
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
-from memoria.simple_memory import SimpleMemory
+from memoria.short_memory import ShortMemory
 from core.security import Security
 
 class Agent:
@@ -38,7 +38,7 @@ class Agent:
         self.workspace = workspace
         self.security = Security(self.workspace)
         
-        self.memory = SimpleMemory()
+        self.memory = ShortMemory()
         self.system_prompt = {
             "role": "system",
             "content": f"""

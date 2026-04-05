@@ -6,7 +6,7 @@ import os
 load_dotenv()
 
 model = os.getenv("model-memory")
-class SimpleMemory:
+class ShortMemory:
     """
     Sistema de memoria híbrida para un agente conversacional.
 
