@@ -1,4 +1,4 @@
-from app.db import conexcion
+from api_db_memoria.db import conexcion
 
 class Request():
     def crear_tablas():
@@ -24,3 +24,27 @@ CREATE TABLE IF NOT EXISTS experiences (
         conn.commit()
         cursor.close()
         conn.close()
+    def summary_post(self, summary, messages):
+        self.summary = summary
+        self.messages = messages
+        conn = conexcion()
+        cursor = conn.cursor()
+        query = """
+        INSERT INTO summarys (summary, messages) VALUES (%S, %S)
+        """
+        cursor.execute(query, (self.summary, self.messages))
+        conn.commit()
+        cursor.close()
+        conn.close()
+    def summary_count(self):
+        conn = conexcion()
+        cursor = conn.cursor()
+        query = """
+        SELECT COUNT(*) FROM summarys 
+        """
+        cursor.execute(query)
+        count = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return count
