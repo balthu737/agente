@@ -56,6 +56,14 @@
         {
             "role": "assistant",
             "content": "Dentro de la carpeta **C:\\proyectos\\aistente de ia\\src\\toolbox** encontrarás los siguientes archivos:\n\n| # | Nombre del archivo | Descripción breve |\n|---|---------------------|-------------------|\n| 1 | `edit_file.py` | Herramienta para editar el contenido de archivos. |\n| 2 | `list_files_in_dir.py` | Herramienta que lista los archivos de un directorio. |\n| 3 | `read_file.py` | Herramienta para leer el contenido de un archivo. |\n| 4 | `sub_agent.py` | Sub‑agente con lógica de flujo de tareas. |\n| 5 | `__init__.py` | Inicializa el paquete `toolbox`. |\n| 6 | `__pycache__` | Carpeta de caché de Python (generada automáticamente). |\n\n¿Quieres ver el contenido de alguno de estos archivos o hacer alguna operación con ellos? 🚀"
+        },
+        {
+            "role": "user",
+            "content": "el hombre llego alguna vez a la luna?"
+        },
+        {
+            "role": "assistant",
+            "content": "Sí, el ser humano llegó a la Luna. La misión **Apollo 11** de la NASA fue la primera que logró colocar a personas en la superficie lunar. El 20 de julio de 1969, el astronauta **Neil Armstrong** se convirtió en el primer ser humano en pisar la Luna, seguido poco después por **Buzz Aldrin**. Michael Collins quedó en órbita lunar en el módulo de comando.\n\nDesde entonces, cinco misiones (Apollo 11, 12, 14, 15, 16 y 17) han enviado humanos a la Luna, dejando en ella restos de equipos, módulos y los trajes de los astronautas. Aunque ningún ser humano ha vuelto a la Luna desde 1972, los programas **Artemis** y otras iniciativas están planeando regresar a la superficie lunar en la próxima década."
         }
     ]
 }
