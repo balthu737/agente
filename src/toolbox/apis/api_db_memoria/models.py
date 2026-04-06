@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS experiences (
         conn = conexcion()
         cursor = conn.cursor()
         query = """
-        INSERT INTO summarys (summary, messages) VALUES (%S, %S)
+        INSERT INTO summarys (summary, messages) VALUES (%s, %s)
         """
         cursor.execute(query, (self.summary, self.messages))
         conn.commit()
@@ -48,3 +48,13 @@ CREATE TABLE IF NOT EXISTS experiences (
         cursor.close()
         conn.close()
         return count
+    def experience_post(self, experience, summarys):
+        conn = conexcion()
+        cursor = conn.cursor()
+        query = """
+        INSERT INTO experience (experience, summarys) VALUES (%s, %s) 
+        """
+        cursor.execute(query, (experience, summarys))
+        conn.commit()
+        cursor.close()
+        conn.close()
