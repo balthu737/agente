@@ -2,10 +2,12 @@ from ollama import chat
 import json
 from dotenv import load_dotenv
 import os
+import requests
 
 load_dotenv()
 
 model = os.getenv("model-memory")
+url = os.getenv("API_URL")
 class ShortMemory:
     """
     Sistema de memoria híbrida para un agente conversacional.
@@ -71,6 +73,7 @@ class ShortMemory:
             self.memory = self.memory[self.num_summarize:]
             
             self.summary = self.summary_memory(to_summarize)
+            requests.post(url+"/summary", json={"summary": self.summary, "messages": to_summarize})
         self._save_json()
     
     def messages(self):

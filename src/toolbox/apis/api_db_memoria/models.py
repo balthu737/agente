@@ -1,7 +1,9 @@
-from api_db_memoria.db import conexcion
+from db import conexcion
 
 class Request():
-    def crear_tablas():
+    def __init__(self):
+        self.summarys = ""
+    def crear_tablas(self):
         conn = conexcion()
         cursor = conn.cursor()
         query = """
@@ -20,19 +22,19 @@ CREATE TABLE IF NOT EXISTS experiences (
         """
         cursor.execute(query)
         conn.commit()
-        cursor.excute(query_2)
+        cursor.execute(query_2)
         conn.commit()
         cursor.close()
         conn.close()
     def summary_post(self, summary, messages):
-        self.summary = summary
+        self.summarys = summary
         self.messages = messages
         conn = conexcion()
         cursor = conn.cursor()
         query = """
         INSERT INTO summarys (summary, messages) VALUES (%s, %s)
         """
-        cursor.execute(query, (self.summary, self.messages))
+        cursor.execute(query, (self.summarys, self.messages))
         conn.commit()
         cursor.close()
         conn.close()
@@ -48,11 +50,23 @@ CREATE TABLE IF NOT EXISTS experiences (
         cursor.close()
         conn.close()
         return count
+    def experience_summary(self):
+        conn = conexcion()
+        cursor = conn.cursor()
+        query = """
+        SELECT * FROM summarys ORDER BY id DESC LIMIT 10
+        """
+        cursor.execute(query)
+        summary = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return summary
     def experience_post(self, experience, summarys):
         conn = conexcion()
         cursor = conn.cursor()
         query = """
-        INSERT INTO experience (experience, summarys) VALUES (%s, %s) 
+        INSERT INTO experiences (experience, summarys) VALUES (%s, %s) 
         """
         cursor.execute(query, (experience, summarys))
         conn.commit()

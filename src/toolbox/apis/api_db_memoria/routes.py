@@ -1,7 +1,12 @@
 from flask import jsonify, Blueprint, request
-from api_db_memoria.models import Request
+import requests
 import json
+from dotenv import load_dotenv
+import os
 from memoria.long_memory import LongMemory
+from models import Request
+
+load_dotenv()
 
 api = Blueprint("api", __name__)
 sql = Request()
@@ -16,8 +21,14 @@ def summary():
     data = request.get_json()
     summary = data.get("summary")
     messages = json.dumps(data.get("messages"))
+    url = os.getenv("API_URL")
     try:
-        sql.summary(summary, messages)
+        sql.summary_post(summary, messages)
+        count = sql.summary_count()
+        pa = count[0][0] % 2
+        if pa == 0 :
+            print(f"Disparando experience, count: {count[0][0]}")
+            requests.post(url+"/experience", json={"old_summarys": summary})
         return jsonify({"message": "resumen guardado"}), 200
     except Exception as e:
         print(e)
@@ -31,7 +42,7 @@ def count():
 @api.route("/experience", methods=["POST"])
 def experience():
     data = request.get_json()
-    old_summarys = data.get("old_summarys")
+    old_summarys = json.dumps(data.get("old_summarys"))
     experience = memory.experience_memory(old_summarys)
     sql.experience_post(experience, old_summarys)
     return jsonify({"message": "Experiencia creada", "summaris": old_summarys, "experience": experience}), 200
