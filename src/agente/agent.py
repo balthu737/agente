@@ -1,19 +1,21 @@
 import importlib
 import os
 import sys
-import os
+from colorama import Fore, Style, init
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
-from memoria.simple_memory import SimpleMemory
+from memoria.short_memory import ShortMemory
 from core.security import Security
+
+init()
 
 class Agent:
     """
-    Representa un agente autónomo con capacidades de memoria y uso de herramientas.
+    Representa un agente autónomo con capacidades de memoria tanto corto como largo plazo, uso de herramientas y apis.
 
     Este agente:
     - Mantiene un historial de conversación (memoria de corto plazo).
-    - Puede resumir contexto previo (memoria de largo plazo).
-    - Carga herramientas dinámicamente desde un directorio.
+    - Puede resumir contexto previo y guardarlo en una db(memoria de largo plazo).
+    - Carga herramientas y apis dinámicamente desde un directorio.
     - Decide cuándo ejecutar herramientas en base a la respuesta del modelo.
 
     Está diseñado para actuar como un asistente personal enfocado en la toma de decisiones,
@@ -26,19 +28,20 @@ class Agent:
         Configura:
         - Lista de herramientas disponibles (`tools`)
         - Mapa de funciones ejecutables (`tool_map`)
-        - Sistema de memoria (`SimpleMemory`)
+        - Espacio de trabajo (`workspace`)
+        - Sistema de memoria (`ShortMemory` y `LongMemory`)
         - Prompt base del sistema (personalidad y reglas del agente)
 
         Además, carga automáticamente las herramientas desde el directorio `toolbox`.
         """
         self.tools = []
         self.tool_map = {}
-        
         self.load_tools()
+        
         self.workspace = workspace
         self.security = Security(self.workspace)
         
-        self.memory = SimpleMemory()
+        self.memory = ShortMemory()
         self.system_prompt = {
             "role": "system",
             "content": f"""
@@ -162,5 +165,5 @@ class Agent:
                 self.memory.add("tool", str(result))
             return True 
         else:
-            print(f'Balthu: {message.content}')
+            print(Fore.BLUE + f'Balthu: {message.content}' + Style.RESET_ALL)
             return False

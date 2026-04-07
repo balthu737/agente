@@ -2,10 +2,14 @@ from ollama import chat
 import sys
 import os
 from dotenv import load_dotenv
+import threading
+from colorama import Fore, Style, init
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 from agente.agent import Agent
+from toolbox.apis.api_db_memoria.init import app
 
 load_dotenv()
+init()
 
 workspace_env = os.getenv("workspace")
 
@@ -15,7 +19,15 @@ else:
     workspace = os.path.join(os.path.dirname(__file__), workspace_env)
 
 agent = Agent(workspace)
-model = os.getenv("model")
+model = os.getenv("model-two")
+print(Fore.GREEN + model + Style.RESET_ALL)
+
+def iniciar_api():
+    a = app()
+    a.run(host="0.0.0.0", port=5000, debug=False)
+hilo = threading.Thread(target=iniciar_api)
+hilo.daemon = True
+hilo.start()
 
 """
 Script principal para ejecutar el agente conversacional en modo interactivo.
@@ -43,13 +55,13 @@ while True:
     Permite mantener una conversación continua hasta que el usuario decida salir.
     """
     
-    user_input = input("Alejo: ").strip()
+    user_input = input(Fore.RED + "Alejo: " + Style.RESET_ALL).strip()
     
     #validacion
     if not user_input:
         continue
     
-    if user_input.lower() in ("salir", "exit", "bye", "chau", "hasta la vista baby"):
+    if user_input.lower() in ("salir", "exit", "bye", "chau"):
         print("Adios!")
         break
     
