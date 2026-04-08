@@ -1,4 +1,4 @@
-from db import conexcion
+from memoria.api_db_memoria.db import conexcion
 
 class Request():
     def __init__(self):
@@ -72,3 +72,18 @@ CREATE TABLE IF NOT EXISTS experiences (
         conn.commit()
         cursor.close()
         conn.close()
+    def experience_feed(self):
+        conn = conexcion()
+        cursor = conn.cursor()
+        query = """
+        SELECT * 
+        FROM experiences 
+        ORDER BY id DESC 
+        LIMIT 20;
+        """
+        cursor.execute(query)
+        feed = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return feed

@@ -4,8 +4,8 @@ import sys
 import os
 import logging
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
-from routes import api
-from models import Request
+from memoria.api_db_memoria.routes import api
+from memoria.api_db_memoria.models import Request
 debug = os.getenv("FLASK_DEBUG", "false").lower() == "true"
 if not debug:
     log = logging.getLogger('werkzeug')

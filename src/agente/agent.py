@@ -48,6 +48,7 @@ class Agent:
             Tu nombre es Balthu.
             Mi nombre es alejo.
             Podes guardar y modificar los archivos de la carpeta {self.workspace}.
+            Todas tus respuestas deben de ser en español.
             Las tools van a devolver un json con lo siguiente,
             status si es 200 quiere decir que la accion se realizo con exito y no es necesario repetirla, si devuelve 400 es porque hubo un error al intentar usar la herramienta,
             messages si es 200 va a devolver un mensaje de confirmacion o el resultado de la herramienta en caso contrario devuelve el error.
@@ -149,8 +150,8 @@ class Agent:
                 fn_name = tool.function.name
                 args = tool.function.arguments
                 path = args.get("path", None)
-                print(f'Balthu quiere usar la herramienta: {fn_name}')
-                print(f'Argumentos: {args}')
+                print(Fore.GREEN + f'Balthu quiere usar la herramienta: {fn_name}' + Style.RESET_ALL)
+                # print(f'Argumentos: {args}')
                 if fn_name in self.tool_map:
                     try:
                         danger = self.security.authorization(fn_name, path)

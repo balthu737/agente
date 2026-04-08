@@ -67,7 +67,7 @@ class ShortMemory:
                 "content": text
             })
         if len(self.memory) > self.max_messeges:
-            print(f'Procesando resumen para {self.num_summarize} mensajes')
+            #print(f'Procesando resumen para {self.num_summarize} mensajes')
             
             to_summarize = self.memory[:self.num_summarize]
             self.memory = self.memory[self.num_summarize:]

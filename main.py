@@ -6,7 +6,7 @@ import threading
 from colorama import Fore, Style, init
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 from agente.agent import Agent
-from toolbox.apis.api_db_memoria.init import app
+from memoria.api_db_memoria.init import app
 
 load_dotenv()
 init()
@@ -19,8 +19,7 @@ else:
     workspace = os.path.join(os.path.dirname(__file__), workspace_env)
 
 agent = Agent(workspace)
-model = os.getenv("model-two")
-print(Fore.GREEN + model + Style.RESET_ALL)
+model = os.getenv("model")
 
 def iniciar_api():
     a = app()

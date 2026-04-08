@@ -4,7 +4,7 @@ import json
 from dotenv import load_dotenv
 import os
 from memoria.long_memory import LongMemory
-from models import Request
+from memoria.api_db_memoria.models import Request
 
 load_dotenv()
 
@@ -25,9 +25,9 @@ def summary():
     try:
         sql.summary_post(summary, messages)
         count = sql.summary_count()
-        pa = count[0][0] % 2
+        pa = count[0][0] % 10
         if pa == 0 :
-            print(f"Disparando experience, count: {count[0][0]}")
+            #print(f"Disparando experience, count: {count[0][0]}")
             requests.post(url+"/experience", json={"old_summarys": summary})
         return jsonify({"message": "resumen guardado"}), 200
     except Exception as e:
@@ -46,3 +46,12 @@ def experience():
     experience = memory.experience_memory(old_summarys)
     sql.experience_post(experience, old_summarys)
     return jsonify({"message": "Experiencia creada", "summaris": old_summarys, "experience": experience}), 200
+
+@api.route("/exprecience/feed", methods=["GET"])
+def feed():
+    try:
+        feed = sql.experience_feed()
+        return jsonify({"message": "Experiencia encontrada", "experience": feed}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Experiencia no encontrada"}), 400
