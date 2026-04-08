@@ -24,7 +24,7 @@ class ShortMemory:
 
     Este enfoque permite mantener contexto relevante sin sobrecargar el modelo.
     """
-    def __init__(self, max_messeges:int=12, num_summarize:int=4):
+    def __init__(self, max_messeges:int=12, num_summarize:int=6):
         """
         Inicializa el sistema de memoria.
 
@@ -67,7 +67,7 @@ class ShortMemory:
                 "content": text
             })
         if len(self.memory) > self.max_messeges:
-            #print(f'Procesando resumen para {self.num_summarize} mensajes')
+            print(f'Procesando resumen para {self.num_summarize} mensajes')
             
             to_summarize = self.memory[:self.num_summarize]
             self.memory = self.memory[self.num_summarize:]

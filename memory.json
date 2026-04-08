@@ -59,6 +59,30 @@
         {
             "role": "tool",
             "content": "Error ejecutando la herramienta: run() missing 1 required positional argument: 'path'"
+        },
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "function": {
+                        "name": "edit_file",
+                        "arguments": {
+                            "path": "C:\\Users\\balth\\OneDrive\\Desktop\\workspace\\Alejo\\LosPrincipiosDeC.md",
+                            "new_text": "# Los principios de C\n\n## 1. Tipado estático y fuerte\nC es un lenguaje **tipado estático**: cada variable debe declararse con un tipo antes de su uso, y ese tipo no cambia durante su vida. Además, es **fuerte**, lo que significa que no se realizan conversiones implícitas entre tipos distintos.\n\n```c\nint edad;          // entero\nfloat altura;      // punto flotante\nchar letra = 'a';  // carácter\n```\n\n## 2. Compilación previa a la ejecución\nEl código fuente (`*.c`) se **compila** a binario antes de ejecutarse. Esto permite optimizaciones de rendimiento y detección temprana de errores.\n\n## 3. Punteros y manejo de memoria\n- Un **puntero** es una variable que almacena una dirección de memoria.\n- La aritmética de punteros permite recorrer bloques de memoria de manera eficiente.\n- La **memoria dinámica** (`malloc`, `calloc`, `realloc`, `free`) da control total sobre la asignación y liberación de recursos.\n\n```c\nint *ptr = malloc(sizeof(int));\n*ptr = 10;\nfree(ptr);\n```\n\n## 4. Estructuras y agregación de datos\nLas estructuras (`struct`) agrupan diferentes tipos bajo un solo nombre, facilitando la organización de datos complejos.\n\n```c\nstruct Persona {\n    char nombre[50];\n    int edad;\n};\n```\n\n## 5. Funciones: modularidad y reutilización\nLas funciones permiten dividir el programa en bloques lógicos y reutilizables. Se recomienda declarar prototipos antes de usarlos.\n\n```c\nint sumar(int a, int b) {\n    return a + b;\n}\n```\n\n## 6. Entrada y salida (I/O)\nC ofrece la biblioteca estándar (`stdio.h`) con funciones como `printf`, `scanf`, `fprintf`, `fscanf`, `fopen`, `fclose`.\n\n```c\nFILE *f = fopen(\"datos.txt\", \"r\");\nif (f) {\n    char buf[100];\n    while (fgets(buf, sizeof(buf), f)) {\n        puts(buf);\n    }\n    fclose(f);\n}\n```\n\n## 7. Manejo de errores\nLas funciones pueden indicar fallos mediante códigos de retorno o la variable global `errno`. Se aconseja verificar siempre el resultado.\n\n```c\nFILE *f = fopen(\"archivo.txt\", \"w\");\nif (!f) {\n    perror(\"open\");\n    exit(EXIT_FAILURE);\n}\n```\n\n## 8. Modularidad: archivos fuente e encabezados\n- **Archivos `.c`** contienen la implementación.\n- **Archivos `.h`** (encabezados) declaran funciones y estructuras.\n- La separación facilita la **compilación incremental** y la **reutilización**.\n\n```c\n/* mi_modulo.h */\n#ifndef MI_MODULO_H\n#define MI_MODULO_H\n\nint mi_funcion(int x);\n\n#endif\n```\n\n## 9. Buenas prácticas de codificación\n- **Constancia**: usar `const` cuando los valores no cambian.\n- **Comentarios claros** (preferiblemente en el idioma del proyecto).\n- **Chequeo de retorno** de funciones críticas (`malloc`, `fopen`).\n- **Liberar memoria** (`free`) para evitar fugas.\n- **Compilar con advertencias** (`-Wall -Wextra -pedantic`).\n\n## 10. Recursos y comunidades\n- **Libros**: *The C Programming Language* de Kernighan y Ritchie.\n- **Documentación oficial**: ISO C standard.\n- **Foros y comunidades**: Stack Overflow, Reddit r/C_Programming.\n\n> Este documento resume los conceptos esenciales para programar en C con calidad y mantenibilidad.\n",
+                            "prev_text": ""
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "role": "tool",
+            "content": "{'status': 200, 'messages': 'Archivo creado'}"
+        },
+        {
+            "role": "assistant",
+            "content": "¡Archivo creado con éxito!  \nEl fichero **LosPrincipiosDeC.md** ha sido guardado en `C:\\Users\\balth\\OneDrive\\Desktop\\workspace\\Alejo`.  \n\nSi necesitas realizar alguna modificación adicional o agregar contenido, dime y lo ajustamos."
         }
     ]
 }
